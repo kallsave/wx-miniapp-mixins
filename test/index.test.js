@@ -94,6 +94,7 @@ Page = (options) => {
 }
 
 describe('test originProperties', () => {
+  const list = []
   const instance = Page({
     mixins: [
       {
@@ -102,7 +103,7 @@ describe('test originProperties', () => {
           name: 'a'
         },
         onLoad() {
-          console.log('mixins onLoad')
+          list.push(0)
           return 'mixins'
         }
       }
@@ -111,7 +112,7 @@ describe('test originProperties', () => {
       count: 0,
     },
     onLoad() {
-      console.log('origin onLoad')
+      list.push(1)
       return 'origin'
     }
   })
@@ -124,7 +125,8 @@ describe('test originProperties', () => {
     expect(instance.data.name).toEqual('a')
   })
 
-  it('originMethods and mixinsMethod run', () => {
+  it('originMethods and mixinsMethod exec', () => {
     expect(instance.onLoad()).toEqual('origin')
+    expect(list).toEqual([0 ,1])
   })
 })
