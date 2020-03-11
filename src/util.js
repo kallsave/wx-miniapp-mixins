@@ -11,3 +11,7 @@ export function isArray(value) {
 export function isPlainObject(value) {
   return toRawType(value) === 'Object'
 }
+
+export function isFunction(value) {
+  return toRawType(value) === 'Function'
+}
