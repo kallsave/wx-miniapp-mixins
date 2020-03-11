@@ -19,6 +19,6 @@ const originMethods = [
   'definitionFilter'
 ]
 
-function mergeComponentOptions() {
+function mergeOptions() {
 
 }

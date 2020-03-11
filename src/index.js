@@ -1,1 +1,1 @@
-import './page'
+import './construction/page.js'

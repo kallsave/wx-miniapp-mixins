@@ -4,7 +4,7 @@ import {
   isArray,
   isPlainObject,
   isFunction,
-} from './util.js'
+} from '../util/index.js'
 
 const originProperties = [
   'data',
