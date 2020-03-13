@@ -1,14 +1,4 @@
-const originProperties = [
-  'properties',
-  'data',
-  'observers',
-  'behaviors',
-  'relations',
-  'externalClasses',
-  'options',
-  'lifetimes',
-  'pageLifetimes',
-]
+// https://developers.weixin.qq.com/miniprogram/dev/reference/api/Component.html
 
 const originMethods = [
   'created',
@@ -18,7 +8,3 @@ const originMethods = [
   'detached',
   'definitionFilter'
 ]
-
-function mergeOptions() {
-
-}
