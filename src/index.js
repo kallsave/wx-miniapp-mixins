@@ -1,39 +1,24 @@
-import appMixins from './construction/app.js'
-import pageMixins from './construction/page.js'
+import appMixinsInstaller from './construction/app'
+import pageMixinsInstaller from './construction/page'
+import componentMixinsInstaller from './construction/component'
+import {
+  appMergeMethods,
+  pageMergeMethods,
+  componentMergeMethods
+} from './util/merge-options'
 
-// 原有的会叠加mixins的方法,mixins的方法会先执行,返回值是原有的方法的返回值
-const pageMergeMethods = [
-  'onLoad',
-  'onShow',
-  'onReady',
-  'onHide',
-  'onUnload',
-  'onPullDownRefresh',
-  'onReachBottom',
-  'onPageScroll',
-  'onResize',
-  'onTabItemTap',
-  'onShareAppMessage',
-]
-
-// 原有的会叠加mixins的方法,mixins的方法会先执行,返回值是原有的方法的返回值
-const appMergeMethods = [
-  'onLaunch',
-  'onShow',
-  'onHide',
-  'onError',
-  'onAppNotFound',
-  'onUnhandledRejection',
-]
-
-export default wxMixins {
-  install({
-    app: appMergeMethods,
-    page: pageMergeMethods
-  } = {}) {
-    appMixins.install(appMergeMethods)
-    pageMixins.install(pageMergeMethods)
+const wxMixins = {
+  install() {
+    if (this.installed) {
+      return
+    }
+    this.installed = true
+    appMixinsInstaller.install(appMergeMethods)
+    pageMixinsInstaller.install(pageMergeMethods)
+    componentMixinsInstaller.install(componentMergeMethods)
   }
 }
+
+export default wxMixins
 
 wxMixins.install()

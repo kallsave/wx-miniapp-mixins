@@ -1,12 +1,14 @@
-// https://developers.weixin.qq.com/miniprogram/dev/reference/api/App.html
-
-import mergeOptions from '../util/merge-options.js'
-import { isArray } from '../util/lang.js'
+import { mergeOptions } from '../util/merge-options'
+import { isArray } from '../util/lang'
 
 const originApp = App
 
 export default {
   install(mergeMethods) {
+    if (this.installed) {
+      return
+    }
+    this.installed = true
     App = (options) => {
       const mixins = options.mixins
       if (isArray(mixins)) {
