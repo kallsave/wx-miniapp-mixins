@@ -1,11 +1,12 @@
 {
-  "name": "wx-mixins",
-  "version": "1.0.0",
+  "name": "wx-miniapp-mixins",
+  "version": "0.0.1",
   "description": "wx miniapp mixins",
-  "main": "dist/wx-mixins.js",
-  "module": "dist/wx-mixins.esm.js",
+  "main": "dist/wx-miniapp-mixins.js",
+  "module": "dist/wx-miniapp-mixins.esm.js",
   "keywords": [
-    "wx-mixins"
+    "mixins",
+    "wx-miniapp-mixins"
   ],
   "scripts": {
     "build": "node scripts/build.js",
