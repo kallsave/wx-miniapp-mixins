@@ -1,9 +1,12 @@
-wx-mixins
+wx-miniapp-mixins
 ========================================
 
-Features
+安装
 ------------
+npm install wx-miniapp-mixins --save
 
+功能
+------------
 给微信小程序带来和vue体验的mixins语法,给App, Page, Component增加mixins功能
 
 使用
@@ -22,8 +25,8 @@ App({
 
 ```
 
-// page.js
 ```javascript
+// page.js
 import testMixins from '../common/mixins/test'
 
 Page({
@@ -33,8 +36,8 @@ Page({
 })
 ```
 
-// component.js
 ```javascript
+// component.js
 import testMixins from '../common/mixins/test'
 
 Component({

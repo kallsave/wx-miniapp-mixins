@@ -17,7 +17,7 @@ const wxMixins = {
     pageMixinsInstaller.install(pageMergeMethods)
     componentMixinsInstaller.install(componentMergeMethods)
   },
-  verson: '0.0.1'
+  verson: '0.0.2'
 }
 
 export default wxMixins
