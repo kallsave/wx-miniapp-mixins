@@ -1,11 +1,12 @@
 import appMixinsInstaller from './construction/app'
 import pageMixinsInstaller from './construction/page'
 import componentMixinsInstaller from './construction/component'
+
 import {
-  appMergeMethods,
-  pageMergeMethods,
-  componentMergeMethods
-} from './util/merge-options'
+  appHooks,
+  pageHooks,
+  componentHooks
+} from './util/lifycycle-hooks'
 
 const wxMixins = {
   install() {
@@ -13,13 +14,13 @@ const wxMixins = {
       return
     }
     this.installed = true
-    appMixinsInstaller.install(appMergeMethods)
-    pageMixinsInstaller.install(pageMergeMethods)
-    componentMixinsInstaller.install(componentMergeMethods)
+    appMixinsInstaller.install(appHooks)
+    pageMixinsInstaller.install(pageHooks)
+    componentMixinsInstaller.install(componentHooks)
   },
-  verson: '0.0.1'
+  verson: '1.0.0'
 }
 
-export default wxMixins
-
 wxMixins.install()
+
+export default wxMixins

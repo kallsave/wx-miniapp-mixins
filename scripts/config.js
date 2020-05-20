@@ -34,29 +34,11 @@ const buildMap = {
   esm: {
     input: resolve('src/index.js'),
     output: {
-      file: resolve(`dist/${name}.esm.js`),
+      file: resolve(`dist/${name}.js`),
       format: 'es',
       banner: banner
     },
   },
-  main: {
-    input: resolve('src/index.js'),
-    output: {
-      file: resolve(`dist/${name}.js`),
-      format: 'umd',
-      name: apiName,
-      banner: banner
-    },
-  },
-  min: {
-    input: resolve('src/index.js'),
-    output: {
-      file: resolve(`dist/${name}.min.js`),
-      format: 'umd',
-      name: apiName,
-      banner: banner
-    },
-  }
 }
 
 module.exports = buildMap

@@ -3,10 +3,27 @@ const fs = require('fs')
 const rollup = require('rollup')
 const terser = require('terser')
 const zlib = require('zlib')
+const rm = require('rimraf')
 const buildMap = require('./config')
 
 if (!fs.existsSync('dist')) {
   fs.mkdirSync('dist')
+}
+
+function resolvePath(dir) {
+  return path.join(__dirname, '..', dir)
+}
+
+function clean() {
+  return new Promise((resolve) => {
+    rm(resolvePath('dist/*'), (err) => {
+      if (err) {
+        throw err
+      } else {
+        resolve()
+      }
+    })
+  })
 }
 
 function write(dest, code, zip) {
@@ -43,6 +60,7 @@ function blue(str) {
 }
 
 async function buildEntry() {
+  await clean()
   for (const key in buildMap) {
     const config = buildMap[key]
     const output = config.output

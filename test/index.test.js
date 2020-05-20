@@ -5,59 +5,86 @@ import {
 
 import {
   mergeOptions,
-  pageMergeMethods
 } from '../src/util/merge-options'
 
-function Page(options) {
+import {
+  componentHooks,
+} from '../src/util/lifycycle-hooks'
+
+function Component(options) {
   return options
 }
 
-const originPage = Page
+const originComponent = Component
 
-Page = (options) => {
+Component = (options) => {
   const mixins = options.mixins
   if (isArray(mixins)) {
-    options = mergeOptions(mixins, options, pageMergeMethods)
+    options = mergeOptions(mixins, options, componentHooks)
     delete options.mixins
   }
-  return originPage(options)
+  return originComponent(options)
 }
 
 describe('test originProperties', () => {
-  const list = []
+  const readyList = []
+  const attachedList = []
   const mixin = {
     data: {
       count: 100,
       name: 'a'
     },
-    onLoad() {
-      list.push(0)
-      return 'mixins'
+    ready() {
+      const text = 'mixins ready'
+      readyList.push(text)
+      return text
+    },
+    lifetimes: {
+      created() {
+        const text = 'mixins created'
+        return text
+      },
+      attached() {
+        const text = 'mixins attached'
+        attachedList.push(text)
+        return text
+      }
     },
     methods: {
       method1() {
-        return 'mixins method1'
+        const text = 'mixins method1'
+        return text
       },
       method2() {
-        return 'mixins method2'
+        const text = 'mixins method2'
+        return text
       },
     }
   }
 
-  const instance = Page({
+  const instance = Component({
     mixins: [
       mixin
     ],
     data: {
       count: 0,
     },
-    onLoad() {
-      list.push(1)
-      return 'origin'
+    ready() {
+      const text = 'origin ready'
+      readyList.push(text)
+      return text
+    },
+    lifetimes: {
+      attached() {
+        const text = 'origin attached'
+        attachedList.push(text)
+        return text
+      }
     },
     methods: {
       method1() {
-        return 'origin method1'
+        const text = 'origin method1'
+        return text
       },
     }
   })
@@ -76,7 +103,9 @@ describe('test originProperties', () => {
   })
 
   it('originMethods and mixinsMethod exec', () => {
-    expect(instance.onLoad()).toEqual('origin')
-    expect(list).toEqual([0 ,1])
+    expect(instance.ready()).toEqual('origin ready')
+    expect(readyList).toEqual(['mixins ready', 'origin ready'])
+    expect(instance.lifetimes.attached()).toEqual('origin attached')
+    expect(attachedList).toEqual(['mixins attached', 'origin attached'])
   })
 })

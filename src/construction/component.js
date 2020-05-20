@@ -12,11 +12,7 @@ export default {
     Component = (options) => {
       const mixins = options.mixins
       if (isArray(mixins)) {
-        options = mergeOptions(
-          mixins,
-          options,
-          mergeMethods,
-        )
+        options = mergeOptions(mixins, options, mergeMethods)
         delete options.mixins
       }
       originComponent(options)

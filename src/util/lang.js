@@ -15,3 +15,10 @@ export function isPlainObject(value) {
 export function isFunction(value) {
   return toRawType(value) === 'Function'
 }
+
+export function isEmptyObject(value) {
+  if (isPlainObject(value)) {
+    return Object.keys(value).length === 0
+  }
+  return false
+}

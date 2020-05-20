@@ -1,9 +1,9 @@
 {
   "name": "wx-miniapp-mixins",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "wx miniapp mixins",
   "main": "dist/wx-miniapp-mixins.js",
-  "module": "dist/wx-miniapp-mixins.esm.js",
+  "module": "dist/wx-miniapp-mixins.js",
   "keywords": [
     "mixins",
     "wx-miniapp-mixins"
@@ -26,6 +26,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^24.9.0",
     "ncp": "^2.0.0",
+    "rimraf": "^3.0.2",
     "rollup": "^1.26.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
