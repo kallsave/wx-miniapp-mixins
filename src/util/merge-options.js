@@ -1,7 +1,7 @@
 import {
   isPlainObject,
   isFunction,
-  isEmptyObject,
+  hasOwn,
 } from './lang'
 
 const LIFETIMES = 'lifetimes'
@@ -47,7 +47,7 @@ export function mergeOptions(mixins, options, hooks = []) {
             }
           }
         } else {
-          if (originItem === undefined) {
+          if (!hasOwn(options, key)) {
             options[key] = mixinItem
           }
         }

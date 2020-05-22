@@ -1,3 +1,9 @@
+const hasOwnProperty = Object.prototype.hasOwnProperty
+
+export function hasOwn(obj, key) {
+  return hasOwnProperty.call(obj, key)
+}
+
 const _toString = Object.prototype.toString
 
 export function toRawType(value) {

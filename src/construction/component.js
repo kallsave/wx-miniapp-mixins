@@ -4,7 +4,7 @@ import { isArray } from '../util/lang'
 const originComponent = Component
 
 export default {
-  install(mergeMethods) {
+  install(hooks) {
     if (this.installed) {
       return
     }
@@ -12,7 +12,7 @@ export default {
     Component = (options) => {
       const mixins = options.mixins
       if (isArray(mixins)) {
-        options = mergeOptions(mixins, options, mergeMethods)
+        options = mergeOptions(mixins, options, hooks)
         delete options.mixins
       }
       originComponent(options)
