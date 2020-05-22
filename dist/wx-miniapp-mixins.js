@@ -3,6 +3,12 @@
  * (c) 2019-2020 kallsave
  * Released under the MIT License.
  */
+const hasOwnProperty = Object.prototype.hasOwnProperty;
+
+function hasOwn(obj, key) {
+  return hasOwnProperty.call(obj, key)
+}
+
 const _toString = Object.prototype.toString;
 
 function toRawType(value) {
@@ -64,7 +70,7 @@ function mergeOptions(mixins, options, hooks = []) {
             };
           }
         } else {
-          if (originItem === undefined) {
+          if (!hasOwn(options, key)) {
             options[key] = mixinItem;
           }
         }
@@ -77,7 +83,7 @@ function mergeOptions(mixins, options, hooks = []) {
 const originApp = App;
 
 var appMixinsInstaller = {
-  install(mergeMethods) {
+  install(hooks) {
     if (this.installed) {
       return
     }
@@ -85,7 +91,7 @@ var appMixinsInstaller = {
     App = (options) => {
       const mixins = options.mixins;
       if (isArray(mixins)) {
-        options = mergeOptions(mixins, options, mergeMethods);
+        options = mergeOptions(mixins, options, hooks);
         delete options.mixins;
       }
       originApp(options);
@@ -96,7 +102,7 @@ var appMixinsInstaller = {
 const originPage = Page;
 
 var pageMixinsInstaller = {
-  install(mergeMethods) {
+  install(hooks) {
     if (this.installed) {
       return
     }
@@ -104,7 +110,7 @@ var pageMixinsInstaller = {
     Page = (options) => {
       const mixins = options.mixins;
       if (isArray(mixins)) {
-        options = mergeOptions(mixins, options, mergeMethods);
+        options = mergeOptions(mixins, options, hooks);
         delete options.mixins;
       }
       originPage(options);
@@ -115,7 +121,7 @@ var pageMixinsInstaller = {
 const originComponent = Component;
 
 var componentMixinsInstaller = {
-  install(mergeMethods) {
+  install(hooks) {
     if (this.installed) {
       return
     }
@@ -123,7 +129,7 @@ var componentMixinsInstaller = {
     Component = (options) => {
       const mixins = options.mixins;
       if (isArray(mixins)) {
-        options = mergeOptions(mixins, options, mergeMethods);
+        options = mergeOptions(mixins, options, hooks);
         delete options.mixins;
       }
       originComponent(options);
