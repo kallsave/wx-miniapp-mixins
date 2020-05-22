@@ -1,5 +1,5 @@
 /*!
- * wx-miniapp-mixins.js v1.0.0
+ * wx-miniapp-mixins.js v1.0.1
  * (c) 2019-2020 kallsave
  * Released under the MIT License.
  */
@@ -184,7 +184,7 @@ const wxMixins = {
     pageMixinsInstaller.install(pageHooks);
     componentMixinsInstaller.install(componentHooks);
   },
-  verson: '1.0.0'
+  verson: '1.0.1'
 };
 
 wxMixins.install();

@@ -1,6 +1,6 @@
 {
   "name": "wx-miniapp-mixins",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "wx miniapp mixins",
   "main": "dist/wx-miniapp-mixins.js",
   "module": "dist/wx-miniapp-mixins.js",
