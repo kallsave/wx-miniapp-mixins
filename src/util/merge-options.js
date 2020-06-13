@@ -9,7 +9,7 @@ const LIFETIMES = 'lifetimes'
 export function mergeOptions(mixins, options, hooks = []) {
   mixins.forEach((mixin) => {
     if (!isPlainObject(mixin)) {
-      throw new Error(`typeof mixin must be plain object`)
+      throw new Error('typeof mixin must be plain object')
     }
     if (mixin.mixins) {
       mixin = mergeOptions(mixin.mixins, mixin, hooks)

@@ -1,18 +1,18 @@
 const path = require('path')
-const cjs = require('rollup-plugin-commonjs')
-const node = require('rollup-plugin-node-resolve')
+const cjs = require('@rollup/plugin-commonjs')
+const node = require('@rollup/plugin-node-resolve')
 const babel = require('rollup-plugin-babel')
 const eslint = require('rollup-plugin-eslint').eslint
 
-const util = require('./util')
-const version = require('../package.json').version
-const name = require('../package.json').name
-const apiName = util.createApiName(name)
+const package = require('../package.json')
+const author = package.author
+const name = package.name
+const version = package.version
 
 const banner =
   '/*!\n' +
   ` * ${name}.js v${version}\n` +
-  ` * (c) 2019-${new Date().getFullYear()} kallsave\n` +
+  ` * (c) 2019-${new Date().getFullYear()} ${author}\n` +
   ' * Released under the MIT License.\n' +
   ' */'
 
@@ -28,6 +28,7 @@ const plugins = [
   }),
   node(),
   cjs(),
+  babel(),
 ]
 
 const buildMap = {
@@ -35,9 +36,10 @@ const buildMap = {
     input: resolve('src/index.js'),
     output: {
       file: resolve(`dist/${name}.js`),
-      format: 'es',
+      format: 'esm',
       banner: banner
     },
+    plugins: plugins,
   },
 }
 

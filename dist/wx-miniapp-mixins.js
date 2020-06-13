@@ -1,73 +1,121 @@
 /*!
- * wx-miniapp-mixins.js v1.0.1
- * (c) 2019-2020 kallsave
+ * wx-miniapp-mixins.js v1.0.2
+ * (c) 2019-2020 kallsave <415034609@qq.com>
  * Released under the MIT License.
  */
-const hasOwnProperty = Object.prototype.hasOwnProperty;
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
 
-function hasOwn(obj, key) {
-  return hasOwnProperty.call(obj, key)
+  return obj;
 }
 
-const _toString = Object.prototype.toString;
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
 
-function toRawType(value) {
-  return _toString.call(value).slice(8, -1)
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
 }
 
-function isArray(value) {
-  return toRawType(value) === 'Array'
-}
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
 
-function isPlainObject(value) {
-  return toRawType(value) === 'Object'
-}
-
-function isFunction(value) {
-  return toRawType(value) === 'Function'
-}
-
-const LIFETIMES = 'lifetimes';
-
-function mergeOptions(mixins, options, hooks = []) {
-  mixins.forEach((mixin) => {
-    if (!isPlainObject(mixin)) {
-      throw new Error(`typeof mixin must be plain object`)
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
     }
+  }
+
+  return target;
+}
+
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+function hasOwn(obj, key) {
+  return hasOwnProperty.call(obj, key);
+}
+var _toString = Object.prototype.toString;
+function toRawType(value) {
+  return _toString.call(value).slice(8, -1);
+}
+function isArray(value) {
+  return toRawType(value) === 'Array';
+}
+function isPlainObject(value) {
+  return toRawType(value) === 'Object';
+}
+function isFunction(value) {
+  return toRawType(value) === 'Function';
+}
+
+var LIFETIMES = 'lifetimes';
+function mergeOptions(mixins, options) {
+  var hooks = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+  mixins.forEach(function (mixin) {
+    if (!isPlainObject(mixin)) {
+      throw new Error('typeof mixin must be plain object');
+    }
+
     if (mixin.mixins) {
       mixin = mergeOptions(mixin.mixins, mixin, hooks);
     }
-    for (const key in mixin) {
-      const originItem = options[key];
-      const mixinItem = mixin[key];
+
+    var _loop = function _loop(key) {
+      var originItem = options[key];
+      var mixinItem = mixin[key];
+
       if (hooks.indexOf(key) !== -1) {
         if (!isFunction(mixinItem)) {
-          throw new Error(`typeof ${key} must be function`)
+          throw new Error("typeof ".concat(key, " must be function"));
         }
+
         options[key] = function () {
-          let result;
+          var result;
           result = mixinItem.apply(this, arguments);
+
           if (originItem) {
             result = originItem.apply(this, arguments);
           }
-          return result
+
+          return result;
         };
       } else if (key === LIFETIMES) {
         if (!isPlainObject(mixinItem)) {
-          throw new Error(`typeof ${key} must be plain object`)
+          throw new Error("typeof ".concat(key, " must be plain object"));
         }
+
         if (!originItem) {
           options[key] = {};
         }
-        const lifetimesMixins = [mixinItem];
+
+        var lifetimesMixins = [mixinItem];
         mergeOptions(lifetimesMixins, options[key], hooks);
       } else {
         if (isPlainObject(originItem)) {
           if (isPlainObject(mixinItem)) {
-            options[key] = {
-              ...mixinItem,
-              ...originItem
-            };
+            options[key] = _objectSpread2(_objectSpread2({}, mixinItem), originItem);
           }
         } else {
           if (!hasOwn(options, key)) {
@@ -75,63 +123,76 @@ function mergeOptions(mixins, options, hooks = []) {
           }
         }
       }
+    };
+
+    for (var key in mixin) {
+      _loop(key);
     }
   });
-  return options
+  return options;
 }
 
-const originApp = App;
-
+var originApp = App;
 var appMixinsInstaller = {
-  install(hooks) {
+  install: function install(hooks) {
     if (this.installed) {
-      return
+      return;
     }
+
     this.installed = true;
-    App = (options) => {
-      const mixins = options.mixins;
+
+    App = function App(options) {
+      var mixins = options.mixins;
+
       if (isArray(mixins)) {
         options = mergeOptions(mixins, options, hooks);
         delete options.mixins;
       }
+
       originApp(options);
     };
   }
 };
 
-const originPage = Page;
-
+var originPage = Page;
 var pageMixinsInstaller = {
-  install(hooks) {
+  install: function install(hooks) {
     if (this.installed) {
-      return
+      return;
     }
+
     this.installed = true;
-    Page = (options) => {
-      const mixins = options.mixins;
+
+    Page = function Page(options) {
+      var mixins = options.mixins;
+
       if (isArray(mixins)) {
         options = mergeOptions(mixins, options, hooks);
         delete options.mixins;
       }
+
       originPage(options);
     };
   }
 };
 
-const originComponent = Component;
-
+var originComponent = Component;
 var componentMixinsInstaller = {
-  install(hooks) {
+  install: function install(hooks) {
     if (this.installed) {
-      return
+      return;
     }
+
     this.installed = true;
-    Component = (options) => {
-      const mixins = options.mixins;
+
+    Component = function Component(options) {
+      var mixins = options.mixins;
+
       if (isArray(mixins)) {
         options = mergeOptions(mixins, options, hooks);
         delete options.mixins;
       }
+
       originComponent(options);
     };
   }
@@ -140,53 +201,23 @@ var componentMixinsInstaller = {
 // https://developers.weixin.qq.com/miniprogram/dev/reference/api/App.html
 // https://developers.weixin.qq.com/miniprogram/dev/reference/api/Page.html
 // https://developers.weixin.qq.com/miniprogram/dev/reference/api/Component.html
+var appHooks = ['onLaunch', 'onShow', 'onHide', 'onError', 'onPageNotFound', 'onUnhandledRejection', 'onThemeChange'];
+var pageHooks = ['onLoad', 'onShow', 'onReady', 'onHide', 'onUnload', 'onPullDownRefresh', 'onReachBottom', 'onShareAppMessage', 'onPageScroll', 'onResize', 'onTabItemTap'];
+var componentHooks = ['created', 'attached', 'ready', 'moved', 'detached', 'definitionFilter'];
 
-const appHooks = [
-  'onLaunch',
-  'onShow',
-  'onHide',
-  'onError',
-  'onPageNotFound',
-  'onUnhandledRejection',
-  'onThemeChange',
-];
-
-const pageHooks = [
-  'onLoad',
-  'onShow',
-  'onReady',
-  'onHide',
-  'onUnload',
-  'onPullDownRefresh',
-  'onReachBottom',
-  'onShareAppMessage',
-  'onPageScroll',
-  'onResize',
-  'onTabItemTap',
-];
-
-const componentHooks = [
-  'created',
-  'attached',
-  'ready',
-  'moved',
-  'detached',
-  'definitionFilter'
-];
-
-const wxMixins = {
-  install() {
+var wxMixins = {
+  install: function install() {
     if (this.installed) {
-      return
+      return;
     }
+
     this.installed = true;
     appMixinsInstaller.install(appHooks);
     pageMixinsInstaller.install(pageHooks);
     componentMixinsInstaller.install(componentHooks);
   },
-  verson: '1.0.1'
+  verson: '1.0.2'
 };
-
 wxMixins.install();
 
 export default wxMixins;
