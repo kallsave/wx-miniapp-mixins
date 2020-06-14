@@ -28,6 +28,7 @@ Component = (options) => {
 
 const readyList = []
 const attachedList = []
+
 const mixin = {
   data: {
     count: 100,
@@ -66,64 +67,53 @@ const mixin = {
   }
 }
 
-describe('test originProperties', () => {
-
-  const first = Component({
-    mixins: [
-      mixin
-    ],
-    data: {
-      count: 0,
-    },
-    ready() {
-      const text = 'origin ready'
-      readyList.push(text)
+const instance = Component({
+  mixins: [
+    mixin
+  ],
+  data: {
+    count: 0,
+  },
+  ready() {
+    const text = 'origin ready'
+    readyList.push(text)
+    return text
+  },
+  lifetimes: {
+    attached() {
+      const text = 'origin attached'
+      attachedList.push(text)
+      return text
+    }
+  },
+  methods: {
+    method1() {
+      const text = 'origin method1'
       return text
     },
-    lifetimes: {
-      attached() {
-        const text = 'origin attached'
-        attachedList.push(text)
-        return text
-      }
-    },
-    methods: {
-      method1() {
-        const text = 'origin method1'
-        return text
-      },
-    }
-  })
+  }
+})
 
-  const second = Component({
-    mixins: [
-      mixin
-    ],
-  })
-
-  first.data.person.city.name = 'shanghai'
+describe('test Component mixins', () => {
 
   it('originProperties cover mixinsProperties', () => {
-    expect(first.data.count).toEqual(0)
+    expect(instance.data.count).toEqual(0)
   })
 
-  it('new mixinsProperties cover originProperties', () => {
-    expect(first.data.name).toEqual('a')
+  it('when originProperties undefined, mixinsProperties cover', () => {
+    expect(instance.data.name).toEqual('a')
   })
 
   it('originProperties merge mixinsProperties', () => {
-    expect(first.methods.method1()).toEqual('origin method1')
-    expect(first.methods.method2()).toEqual('mixins method2')
+    expect(instance.methods.method1()).toEqual('origin method1')
+    expect(instance.methods.method2()).toEqual('mixins method2')
   })
 
-  it('originMethods and mixinsMethod exec', () => {
-    expect(first.ready()).toEqual('origin ready')
+  it('merge originHook and mixinsHook', () => {
+    expect(instance.ready()).toEqual('origin ready')
     expect(readyList).toEqual(['mixins ready', 'origin ready'])
-    expect(first.lifetimes.attached()).toEqual('origin attached')
+    expect(instance.lifetimes.attached()).toEqual('origin attached')
     expect(attachedList).toEqual(['mixins attached', 'origin attached'])
   })
 
-  it('deep clone mixins', () => {
-    expect(second.data.person.city.name).toEqual('shenzhen')
-  })
 })

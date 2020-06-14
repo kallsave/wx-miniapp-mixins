@@ -2,17 +2,15 @@ import {
   isPlainObject,
   isFunction,
   hasOwn,
-  deepClone,
 } from './lang'
 
 const LIFETIMES = 'lifetimes'
 
 export function mergeOptions(mixins, options, hooks = []) {
-  mixins.forEach((item) => {
-    if (!isPlainObject(item)) {
+  mixins.forEach((mixin) => {
+    if (!isPlainObject(mixin)) {
       throw new Error('typeof mixin must be plain object')
     }
-    let mixin = deepClone(item)
     if (mixin.mixins) {
       mixin = mergeOptions(mixin.mixins, mixin, hooks)
     }
