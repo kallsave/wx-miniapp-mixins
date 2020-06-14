@@ -1,5 +1,5 @@
 /*!
- * wx-miniapp-mixins.js v1.0.2
+ * wx-miniapp-mixins.js v1.0.3
  * (c) 2019-2020 kallsave <415034609@qq.com>
  * Released under the MIT License.
  */
@@ -60,6 +60,24 @@ var _toString = Object.prototype.toString;
 function toRawType(value) {
   return _toString.call(value).slice(8, -1);
 }
+function deepClone(value) {
+  var ret;
+  var type = toRawType(value);
+
+  if (type === 'Object') {
+    ret = {};
+  } else if (type === 'Array') {
+    ret = [];
+  } else {
+    return value;
+  }
+
+  Object.keys(value).forEach(function (key) {
+    var copy = value[key];
+    ret[key] = deepClone(copy);
+  });
+  return ret;
+}
 function isArray(value) {
   return toRawType(value) === 'Array';
 }
@@ -73,10 +91,12 @@ function isFunction(value) {
 var LIFETIMES = 'lifetimes';
 function mergeOptions(mixins, options) {
   var hooks = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-  mixins.forEach(function (mixin) {
-    if (!isPlainObject(mixin)) {
+  mixins.forEach(function (item) {
+    if (!isPlainObject(item)) {
       throw new Error('typeof mixin must be plain object');
     }
+
+    var mixin = deepClone(item);
 
     if (mixin.mixins) {
       mixin = mergeOptions(mixin.mixins, mixin, hooks);
@@ -216,7 +236,7 @@ var wxMixins = {
     pageMixinsInstaller.install(pageHooks);
     componentMixinsInstaller.install(componentHooks);
   },
-  verson: '1.0.2'
+  verson: '1.0.3'
 };
 wxMixins.install();
 

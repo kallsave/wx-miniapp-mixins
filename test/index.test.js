@@ -26,43 +26,49 @@ Component = (options) => {
   return originComponent(options)
 }
 
-describe('test originProperties', () => {
-  const readyList = []
-  const attachedList = []
-  const mixin = {
-    data: {
-      count: 100,
-      name: 'a'
-    },
-    ready() {
-      const text = 'mixins ready'
-      readyList.push(text)
+const readyList = []
+const attachedList = []
+const mixin = {
+  data: {
+    count: 100,
+    name: 'a',
+    person: {
+      city: {
+        name: 'shenzhen'
+      }
+    }
+  },
+  ready() {
+    const text = 'mixins ready'
+    readyList.push(text)
+    return text
+  },
+  lifetimes: {
+    created() {
+      const text = 'mixins created'
       return text
     },
-    lifetimes: {
-      created() {
-        const text = 'mixins created'
-        return text
-      },
-      attached() {
-        const text = 'mixins attached'
-        attachedList.push(text)
-        return text
-      }
-    },
-    methods: {
-      method1() {
-        const text = 'mixins method1'
-        return text
-      },
-      method2() {
-        const text = 'mixins method2'
-        return text
-      },
+    attached() {
+      const text = 'mixins attached'
+      attachedList.push(text)
+      return text
     }
+  },
+  methods: {
+    method1() {
+      const text = 'mixins method1'
+      return text
+    },
+    method2() {
+      const text = 'mixins method2'
+      return text
+    },
   }
+}
 
-  const instance = Component({
+describe('test originProperties', () => {
+
+  const first = Component({
     mixins: [
       mixin
     ],
@@ -89,23 +95,35 @@ describe('test originProperties', () => {
     }
   })
 
+  const second = Component({
+    mixins: [
+      mixin
+    ],
+  })
+
+  first.data.person.city.name = 'shanghai'
+
   it('originProperties cover mixinsProperties', () => {
-    expect(instance.data.count).toEqual(0)
+    expect(first.data.count).toEqual(0)
   })
 
   it('new mixinsProperties cover originProperties', () => {
-    expect(instance.data.name).toEqual('a')
+    expect(first.data.name).toEqual('a')
   })
 
   it('originProperties merge mixinsProperties', () => {
-    expect(instance.methods.method1()).toEqual('origin method1')
-    expect(instance.methods.method2()).toEqual('mixins method2')
+    expect(first.methods.method1()).toEqual('origin method1')
+    expect(first.methods.method2()).toEqual('mixins method2')
   })
 
   it('originMethods and mixinsMethod exec', () => {
-    expect(instance.ready()).toEqual('origin ready')
+    expect(first.ready()).toEqual('origin ready')
     expect(readyList).toEqual(['mixins ready', 'origin ready'])
-    expect(instance.lifetimes.attached()).toEqual('origin attached')
+    expect(first.lifetimes.attached()).toEqual('origin attached')
     expect(attachedList).toEqual(['mixins attached', 'origin attached'])
+  })
+
+  it('deep clone mixins', () => {
+    expect(second.data.person.city.name).toEqual('shenzhen')
   })
 })

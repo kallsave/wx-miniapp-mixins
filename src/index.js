@@ -18,7 +18,7 @@ const wxMixins = {
     pageMixinsInstaller.install(pageHooks)
     componentMixinsInstaller.install(componentHooks)
   },
-  verson: '1.0.2'
+  verson: '1.0.3'
 }
 
 wxMixins.install()
