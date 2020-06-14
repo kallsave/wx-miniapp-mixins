@@ -1,30 +1,4 @@
-
-import {
-  isArray,
-} from '../src/util/lang'
-
-import {
-  mergeOptions,
-} from '../src/util/merge-options'
-
-import {
-  componentHooks,
-} from '../src/util/lifycycle-hooks'
-
-function Component(options) {
-  return options
-}
-
-const originComponent = Component
-
-Component = (options) => {
-  const mixins = options.mixins
-  if (isArray(mixins)) {
-    options = mergeOptions(mixins, options, componentHooks)
-    delete options.mixins
-  }
-  return originComponent(options)
-}
+import './config/index'
 
 const readyList = []
 const attachedList = []
@@ -67,7 +41,7 @@ const mixin = {
   }
 }
 
-const instance = Component({
+const options = {
   mixins: [
     mixin
   ],
@@ -92,27 +66,27 @@ const instance = Component({
       return text
     },
   }
-})
+}
+
+Component(options)
 
 describe('test Component mixins', () => {
 
   it('originProperties cover mixinsProperties', () => {
-    expect(instance.data.count).toEqual(0)
+    expect(options.data.count).toEqual(0)
   })
 
   it('when originProperties undefined, mixinsProperties cover', () => {
-    expect(instance.data.name).toEqual('a')
+    expect(options.data.name).toEqual('a')
   })
 
   it('originProperties merge mixinsProperties', () => {
-    expect(instance.methods.method1()).toEqual('origin method1')
-    expect(instance.methods.method2()).toEqual('mixins method2')
+    expect(options.methods.method1()).toEqual('origin method1')
+    expect(options.methods.method2()).toEqual('mixins method2')
   })
 
   it('merge originHook and mixinsHook', () => {
-    expect(instance.ready()).toEqual('origin ready')
     expect(readyList).toEqual(['mixins ready', 'origin ready'])
-    expect(instance.lifetimes.attached()).toEqual('origin attached')
     expect(attachedList).toEqual(['mixins attached', 'origin attached'])
   })
 

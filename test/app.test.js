@@ -1,31 +1,4 @@
-import {
-  isArray,
-} from '../src/util/lang'
-
-import {
-  mergeOptions,
-} from '../src/util/merge-options'
-
-import {
-  appHooks,
-} from '../src/util/lifycycle-hooks'
-
-function App(options) {
-  options.onLaunch && options.onLaunch()
-  options.onShow && options.onShow()
-  return options
-}
-
-const originPage = App
-
-App = (options) => {
-  const mixins = options.mixins
-  if (isArray(mixins)) {
-    options = mergeOptions(mixins, options, appHooks)
-    delete options.mixins
-  }
-  return originPage(options)
-}
+import './config/index'
 
 const onLaunchList = []
 
@@ -53,7 +26,7 @@ const mixin = {
   },
 }
 
-const instance = App({
+const options = {
   mixins: [
     mixin
   ],
@@ -68,21 +41,23 @@ const instance = App({
     const text = 'origin method1'
     return text
   },
-})
+}
+
+App(options)
 
 describe('test App mixins', () => {
 
   it('originProperties cover mixinsProperties', () => {
-    expect(instance.data.count).toEqual(0)
+    expect(options.data.count).toEqual(0)
   })
 
   it('when originProperties undefined, mixinsProperties cover', () => {
-    expect(instance.data.name).toEqual('a')
+    expect(options.data.name).toEqual('a')
   })
 
   it('originProperties merge mixinsProperties', () => {
-    expect(instance.method1()).toEqual('origin method1')
-    expect(instance.method2()).toEqual('mixins method2')
+    expect(options.method1()).toEqual('origin method1')
+    expect(options.method2()).toEqual('mixins method2')
   })
 
   it('merge originHook and mixinsHook', () => {
