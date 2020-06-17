@@ -1,6 +1,6 @@
-import appMixinsInstaller from './construction/app'
-import pageMixinsInstaller from './construction/page'
-import componentMixinsInstaller from './construction/component'
+import appInstaller from './construction/app'
+import pageInstaller from './construction/page'
+import componentInstaller from './construction/component'
 
 import {
   appHooks,
@@ -8,19 +8,19 @@ import {
   componentHooks
 } from './util/lifycycle-hooks'
 
-const wxMixins = {
+const plugin = {
   install() {
     if (this.installed) {
       return
     }
     this.installed = true
-    appMixinsInstaller.install(appHooks)
-    pageMixinsInstaller.install(pageHooks)
-    componentMixinsInstaller.install(componentHooks)
+    appInstaller.install(appHooks)
+    pageInstaller.install(pageHooks)
+    componentInstaller.install(componentHooks)
   },
-  verson: '1.0.6'
+  verson: '1.0.7'
 }
 
-wxMixins.install()
+plugin.install()
 
-export default wxMixins
+export default plugin

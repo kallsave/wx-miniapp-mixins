@@ -1,5 +1,5 @@
 /*!
- * wx-miniapp-mixins.js v1.0.6
+ * wx-miniapp-mixins.js v1.0.7
  * (c) 2019-2020 kallsave <415034609@qq.com>
  * Released under the MIT License.
  */
@@ -133,7 +133,7 @@ function mergeOptions(mixins, options) {
 }
 
 var originApp = App;
-var appMixinsInstaller = {
+var appInstaller = {
   install: function install(hooks) {
     if (this.installed) {
       return;
@@ -155,7 +155,7 @@ var appMixinsInstaller = {
 };
 
 var originPage = Page;
-var pageMixinsInstaller = {
+var pageInstaller = {
   install: function install(hooks) {
     if (this.installed) {
       return;
@@ -177,7 +177,7 @@ var pageMixinsInstaller = {
 };
 
 var originComponent = Component;
-var componentMixinsInstaller = {
+var componentInstaller = {
   install: function install(hooks) {
     if (this.installed) {
       return;
@@ -205,19 +205,19 @@ var appHooks = ['onLaunch', 'onShow', 'onHide', 'onError', 'onPageNotFound', 'on
 var pageHooks = ['onLoad', 'onShow', 'onReady', 'onHide', 'onUnload', 'onPullDownRefresh', 'onReachBottom', 'onShareAppMessage', 'onPageScroll', 'onResize', 'onTabItemTap'];
 var componentHooks = ['created', 'attached', 'ready', 'moved', 'detached', 'definitionFilter'];
 
-var wxMixins = {
+var plugin = {
   install: function install() {
     if (this.installed) {
       return;
     }
 
     this.installed = true;
-    appMixinsInstaller.install(appHooks);
-    pageMixinsInstaller.install(pageHooks);
-    componentMixinsInstaller.install(componentHooks);
+    appInstaller.install(appHooks);
+    pageInstaller.install(pageHooks);
+    componentInstaller.install(componentHooks);
   },
-  verson: '1.0.6'
+  verson: '1.0.7'
 };
-wxMixins.install();
+plugin.install();
 
-export default wxMixins;
+export default plugin;
