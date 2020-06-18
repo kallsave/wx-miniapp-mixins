@@ -1,7 +1,7 @@
 const path = require('path')
 const cjs = require('@rollup/plugin-commonjs')
 const node = require('@rollup/plugin-node-resolve')
-const babel = require('rollup-plugin-babel')
+const replace = require('@rollup/plugin-replace')
 const eslint = require('rollup-plugin-eslint').eslint
 
 const package = require('../package.json')
@@ -21,6 +21,10 @@ const resolve = (p) => {
 }
 
 const plugins = [
+  replace({
+    include: 'src/index.js',
+    VERSION: version,
+  }),
   eslint({
     include: [
       resolve('src/**/*.js')
@@ -28,7 +32,6 @@ const plugins = [
   }),
   node(),
   cjs(),
-  babel(),
 ]
 
 const buildMap = {

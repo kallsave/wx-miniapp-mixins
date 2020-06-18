@@ -15,7 +15,7 @@ npm install wx-miniapp-mixins --save
 ```javascript
 // app.js
 // 导入js给App,Page,Component增加mixins的扩展
-import './miniprogram_npm/wx-miniapp-mixins/index.js'
+import './miniprogram_npm/wx-miniapp-mixins/index'
 ```
 
 ```javascript

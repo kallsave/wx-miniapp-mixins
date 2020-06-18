@@ -1,6 +1,6 @@
 {
   "name": "wx-miniapp-mixins",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "wx miniapp mixins",
   "main": "dist/wx-miniapp-mixins.js",
   "module": "dist/wx-miniapp-mixins.js",
@@ -10,16 +10,18 @@
   ],
   "scripts": {
     "build": "node scripts/build.js",
-    "test": "jest"
+    "test": "cross-env BABEL_ENV=test jest"
   },
   "author": "kallsave <415034609@qq.com>",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.8.7",
+    "@babel/plugin-transform-runtime": "^7.10.1",
     "@babel/preset-env": "^7.8.7",
     "@babel/runtime": "^7.10.2",
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
+    "@rollup/plugin-replace": "^2.3.3",
     "babel-eslint": "^10.1.0",
     "cross-env": "^5.2.1",
     "eslint-config-standard": "^14.1.0",
@@ -33,7 +35,6 @@
     "rollup": "^2.1.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-eslint": "^7.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
     "terser": "^4.3.9",
     "zlib": "^1.0.5"
   }

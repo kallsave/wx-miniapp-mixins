@@ -18,7 +18,7 @@ const plugin = {
     pageInstaller.install(pageHooks)
     componentInstaller.install(componentHooks)
   },
-  verson: '1.0.7'
+  verson: 'VERSION'
 }
 
 plugin.install()
