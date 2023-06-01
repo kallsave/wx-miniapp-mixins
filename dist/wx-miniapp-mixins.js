@@ -37,7 +37,6 @@ const LIFETIMES = 'lifetimes';
 
 function mergeOptions(mixins, options, hooks = []) {
   mixins.forEach((mixin) => {
-
     if (!isPlainObject(mixin)) {
       throw new Error('typeof mixin must be plain object')
     }
@@ -108,16 +107,13 @@ function mergeOptions(mixins, options, hooks = []) {
                 const result = originResult === undefined ? mixinResult : originResult;
                 return result
               }
-
             } else {
               const result = mixinResult;
               return result
             }
           }
         };
-
       } else if (key === LIFETIMES) {
-
         if (!isPlainObject(mixinItem)) {
           throw new Error(`typeof ${key} must be plain object`)
         }
@@ -128,16 +124,13 @@ function mergeOptions(mixins, options, hooks = []) {
         const lifetimesMixins = [mixinItem];
         mergeOptions(lifetimesMixins, options[key], hooks);
       } else {
-
         if (isPlainObject(originItem)) {
-
           if (isPlainObject(mixinItem)) {
             options[key] = {
               ...mixinItem,
               ...originItem
             };
           }
-
         } else {
           if (!hasOwn(options, key)) {
             options[key] = mixinItem;

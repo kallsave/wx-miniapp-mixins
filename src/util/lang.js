@@ -38,4 +38,3 @@ export function createPromise(cb) {
     cb(resolve, reject)
   })
 }
-
