@@ -32,3 +32,10 @@ export function isEmptyObject(value) {
   }
   return false
 }
+
+export function createPromise(cb) {
+  return new Promise((resolve, reject) => {
+    cb(resolve, reject)
+  })
+}
+
