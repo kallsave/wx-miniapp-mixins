@@ -1,6 +1,6 @@
 /*!
- * wx-miniapp-mixins.js v1.0.8
- * (c) 2019-2020 kallsave <415034609@qq.com>
+ * wx-miniapp-mixins.js v1.0.9
+ * (c) 2019-2023 kallsave <415034609@qq.com>
  * Released under the MIT License.
  */
 const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -27,48 +27,117 @@ function isFunction(value) {
   return toRawType(value) === 'Function'
 }
 
+function createPromise(cb) {
+  return new Promise((resolve, reject) => {
+    cb(resolve, reject);
+  })
+}
+
 const LIFETIMES = 'lifetimes';
 
 function mergeOptions(mixins, options, hooks = []) {
   mixins.forEach((mixin) => {
+
     if (!isPlainObject(mixin)) {
       throw new Error('typeof mixin must be plain object')
     }
+
     if (mixin.mixins) {
       mixin = mergeOptions(mixin.mixins, mixin, hooks);
     }
+
     for (const key in mixin) {
       const originItem = options[key];
       const mixinItem = mixin[key];
+
       if (hooks.indexOf(key) !== -1) {
         if (!isFunction(mixinItem)) {
           throw new Error(`typeof ${key} must be function`)
         }
+
         options[key] = function () {
-          let result;
-          result = mixinItem.apply(this, arguments);
-          if (originItem) {
-            result = originItem.apply(this, arguments);
+          let mixinResult;
+          let originResult;
+
+          mixinResult = mixinItem.apply(this, arguments);
+          const isMixinResultPromise = mixinResult instanceof Promise;
+
+          if (isMixinResultPromise) {
+            return createPromise((resolve) => {
+              mixinResult.then((data) => {
+                mixinResult = data;
+
+                if (originItem) {
+                  originResult = originItem.apply(this, arguments);
+
+                  const isOriginResultPromise = originResult instanceof Promise;
+
+                  if (isOriginResultPromise) {
+                    originResult.then((data) => {
+                      originResult = data;
+
+                      const result = originResult === undefined ? mixinResult : originResult;
+                      resolve(result);
+                    });
+                  } else {
+                    const result = originResult === undefined ? mixinResult : originResult;
+                    resolve(result);
+                  }
+                } else {
+                  const result = mixinResult;
+                  resolve(result);
+                }
+              });
+            })
+          } else {
+            if (originItem) {
+              originResult = originItem.apply(this, arguments);
+
+              const isOriginResultPromise = originResult instanceof Promise;
+
+              if (isOriginResultPromise) {
+                return createPromise((resolve) => {
+                  originResult.then((data) => {
+                    originResult = data;
+
+                    const result = originResult === undefined ? mixinResult : originResult;
+                    resolve(result);
+                  });
+                })
+              } else {
+                const result = originResult === undefined ? mixinResult : originResult;
+                return result
+              }
+
+            } else {
+              const result = mixinResult;
+              return result
+            }
           }
-          return result
         };
+
       } else if (key === LIFETIMES) {
+
         if (!isPlainObject(mixinItem)) {
           throw new Error(`typeof ${key} must be plain object`)
         }
         if (!originItem) {
           options[key] = {};
         }
+
         const lifetimesMixins = [mixinItem];
         mergeOptions(lifetimesMixins, options[key], hooks);
       } else {
+
         if (isPlainObject(originItem)) {
+
           if (isPlainObject(mixinItem)) {
             options[key] = {
               ...mixinItem,
               ...originItem
             };
           }
+
         } else {
           if (!hasOwn(options, key)) {
             options[key] = mixinItem;
@@ -77,6 +146,7 @@ function mergeOptions(mixins, options, hooks = []) {
       }
     }
   });
+
   return options
 }
 
@@ -184,9 +254,9 @@ const plugin = {
     pageInstaller.install(pageHooks);
     componentInstaller.install(componentHooks);
   },
-  verson: '1.0.8'
+  verson: '1.0.9'
 };
 
 plugin.install();
 
-export default plugin;
+export { plugin as default };
