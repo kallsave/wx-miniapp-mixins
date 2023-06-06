@@ -54,3 +54,4 @@ Component({
 其它
 ------------
 mixins混入的对象是浅合并
+支持async/await Promise
